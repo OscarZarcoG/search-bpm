@@ -5,12 +5,14 @@ import { SearchForm } from '@/components/SearchForm';
 import { SongCard } from '@/components/SongCard';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { SearchHistory, SearchItem } from '@/components/SearchHistory';
+import { ConfirmModal } from '@/components/ConfirmModal';
 import { useBpmSearch } from '@/hooks/useBpmSearch';
 import { Music4, AlertCircle } from 'lucide-react';
 
 export default function Home() {
   const { data, loading, error, search } = useBpmSearch();
   const [history, setHistory] = useState<SearchItem[]>([]);
+  const [isConfirmHistoryOpen, setIsConfirmHistoryOpen] = useState(false);
 
   // Load history from localStorage on mount
   useEffect(() => {
@@ -103,9 +105,21 @@ export default function Home() {
         <SearchHistory 
           history={history} 
           onSelect={(song, artist) => handleSearch(song, artist)} 
-          onClear={handleClearHistory} 
+          onClear={() => setIsConfirmHistoryOpen(true)} 
         />
       </div>
+
+      <ConfirmModal 
+        isOpen={isConfirmHistoryOpen}
+        title="¿Borrar historial?"
+        message="Esta acción eliminará todas tus búsquedas recientes de la memoria local y no se puede deshacer."
+        confirmLabel="Borrar todo"
+        onConfirm={() => {
+          handleClearHistory();
+          setIsConfirmHistoryOpen(false);
+        }}
+        onCancel={() => setIsConfirmHistoryOpen(false)}
+      />
     </main>
   );
 }

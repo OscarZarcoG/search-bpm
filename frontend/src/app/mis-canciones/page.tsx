@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useCustomSongs } from '@/hooks/useCustomSongs';
 import { CustomSongForm } from '@/components/CustomSongForm';
+import { ConfirmModal } from '@/components/ConfirmModal';
 import { CustomSong, CustomSongCreate } from '@/types/customSong';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { Plus, Trash2, Edit3, Activity, Music, Clock, Filter } from 'lucide-react';
@@ -12,6 +13,7 @@ export default function MisCanciones() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingSong, setEditingSong] = useState<CustomSong | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [songToDelete, setSongToDelete] = useState<number | null>(null);
   const [filterBpm, setFilterBpm] = useState('todos');
   const [filterTimeSig, setFilterTimeSig] = useState('todos');
   const [filterKey, setFilterKey] = useState('todos');
@@ -40,9 +42,14 @@ export default function MisCanciones() {
     if (success) setIsModalOpen(false);
   };
 
-  const handleDelete = async (id: number) => {
-    if (confirm('¿Estás seguro de que deseas eliminar esta canción de tu lista?')) {
-       await removeSong(id);
+  const handleDelete = (id: number) => {
+    setSongToDelete(id);
+  };
+
+  const confirmDelete = async () => {
+    if (songToDelete) {
+      await removeSong(songToDelete);
+      setSongToDelete(null);
     }
   };
 
@@ -209,6 +216,15 @@ export default function MisCanciones() {
           isLoading={isSubmitting}
         />
       )}
+
+      <ConfirmModal 
+        isOpen={!!songToDelete}
+        title="¿Eliminar canción?"
+        message="¿Estás seguro de que deseas eliminar esta canción de tu repertorio? Esta operación no se puede deshacer."
+        confirmLabel="Eliminar"
+        onConfirm={confirmDelete}
+        onCancel={() => setSongToDelete(null)}
+      />
     </main>
   );
 }
