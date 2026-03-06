@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useCustomSongs } from '@/hooks/useCustomSongs';
 import { CustomSongForm } from '@/components/CustomSongForm';
 import { ConfirmModal } from '@/components/ConfirmModal';
+import { Metronome } from '@/components/Metronome';
 import { CustomSong, CustomSongCreate } from '@/types/customSong';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { Plus, Trash2, Edit3, Activity, Music, Clock, Filter } from 'lucide-react';
@@ -52,6 +53,8 @@ export default function MisCanciones() {
       setSongToDelete(null);
     }
   };
+
+
 
   const getBpmCategory = (tempo: number) => {
     if (tempo < 90) return { label: 'Lento', color: 'bg-blue-500/10 text-blue-400 border-blue-500/20' };
@@ -183,6 +186,11 @@ export default function MisCanciones() {
                                <span className="text-sm text-slate-300">{song.time_signature}/4</span>
                              </div>
                            )}
+                         </div>
+
+                         {/* Metronome Integration */}
+                         <div className="mt-5 pt-4 border-t border-white/5 font-mono">
+                           <Metronome bpm={song.tempo} label="Tempo" />
                          </div>
                       </div>
                       {/* Actions */}

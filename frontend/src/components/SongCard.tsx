@@ -1,5 +1,6 @@
 import { SongBPM } from '@/types/song';
 import { Music2, Clock, Music, Activity } from 'lucide-react';
+import { Metronome } from './Metronome';
 
 interface SongCardProps {
   data: SongBPM;
@@ -35,7 +36,7 @@ export function SongCard({ data }: SongCardProps) {
 
         {/* Info Grid */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="flex items-center p-4 transition-colors rounded-2xl bg-slate-800/40 hover:bg-slate-800/60">
+          <div className="flex items-center p-4 transition-colors rounded-2xl bg-slate-800/40 hover:bg-slate-800/60 font-mono">
             <Activity className="w-8 h-8 mr-3 text-rose-400" />
             <div>
               <p className="text-xs font-medium text-slate-400">BPM</p>
@@ -58,6 +59,11 @@ export function SongCard({ data }: SongCardProps) {
               <p className="text-lg font-bold text-white tracking-tight">{data.time_signature}/4</p>
             </div>
           </div>
+        </div>
+
+        {/* Metronome Integration */}
+        <div className="pt-4 border-t border-slate-800/50">
+          <Metronome bpm={data.tempo} label="Escuchar Tempo" />
         </div>
       </div>
     </div>
