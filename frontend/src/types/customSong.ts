@@ -15,4 +15,4 @@ export interface CustomSongCreate {
   time_signature?: number;
 }
 
-export interface CustomSongUpdate extends CustomSongCreate {}
+export type CustomSongUpdate = CustomSongCreate;

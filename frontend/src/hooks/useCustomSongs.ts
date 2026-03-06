@@ -13,7 +13,7 @@ export function useCustomSongs() {
     try {
       const data = await getCustomSongs();
       setSongs(data);
-    } catch (err: any) {
+    } catch {
       setError('Error al recuperar tus canciones.');
     } finally {
       setLoading(false);
@@ -29,7 +29,7 @@ export function useCustomSongs() {
       const newSong = await createCustomSong(song);
       setSongs(prev => [...prev, newSong]);
       return true;
-    } catch (err) {
+    } catch {
       setError('Error al crear la canción.');
       return false;
     }
@@ -40,7 +40,7 @@ export function useCustomSongs() {
       const updated = await updateCustomSong(id, song);
       setSongs(prev => prev.map(s => (s.id === id ? updated : s)));
       return true;
-    } catch (err) {
+    } catch {
       setError('Error al actualizar la canción.');
       return false;
     }
@@ -51,7 +51,7 @@ export function useCustomSongs() {
       await deleteCustomSong(id);
       setSongs(prev => prev.filter(s => s.id !== id));
       return true;
-    } catch (err) {
+    } catch {
       setError('Error al eliminar la canción.');
       return false;
     }

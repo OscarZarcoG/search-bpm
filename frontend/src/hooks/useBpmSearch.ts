@@ -24,8 +24,8 @@ export function useBpmSearch() {
       const result = await searchSongBPM(song, artist);
       setData(result);
       return result;
-    } catch (error) {
-      const err = error as any;
+    } catch (error: unknown) {
+      const err = error as { response?: { status?: number; data?: { detail?: string } } };
       if (err?.response?.status === 404) {
         setError(formatError(err.response?.data?.detail || 'Canción no encontrada. Prueba con otro término de búsqueda o añade el nombre del artista.'));
       } else {
