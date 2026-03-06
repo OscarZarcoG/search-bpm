@@ -190,7 +190,7 @@ export default function MisCanciones() {
 
                          {/* Metronome Integration */}
                          <div className="mt-5 pt-4 border-t border-white/5 font-mono">
-                           <Metronome bpm={song.tempo} label="Tempo" />
+                           <Metronome bpm={song.tempo} timeSignature={song.time_signature} label="Tempo" />
                          </div>
                       </div>
                       {/* Actions */}

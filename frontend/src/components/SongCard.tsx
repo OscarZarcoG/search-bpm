@@ -63,7 +63,7 @@ export function SongCard({ data }: SongCardProps) {
 
         {/* Metronome Integration */}
         <div className="pt-4 border-t border-slate-800/50">
-          <Metronome bpm={data.tempo} label="Escuchar Tempo" />
+          <Metronome bpm={data.tempo} timeSignature={data.time_signature} label="Escuchar Tempo" />
         </div>
       </div>
     </div>

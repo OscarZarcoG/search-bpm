@@ -83,22 +83,29 @@ export function CustomSongForm({ initialData, onSubmit, onCancel, isLoading }: C
 
             <div>
               <label className="block mb-1.5 text-sm font-medium text-slate-300">Métrica</label>
-              <input
+              <select
                 {...register('time_signature', { valueAsNumber: true })}
-                type="number"
-                placeholder="4"
-                className="w-full px-3.5 py-2.5 text-white bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-colors"
-              />
+                className="w-full px-3.5 py-2.5 text-white bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-colors appearance-none"
+              >
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(num => (
+                  <option key={num} value={num} className="bg-slate-900">{num}/4</option>
+                ))}
+              </select>
             </div>
           </div>
 
           <div>
             <label className="block mb-1.5 text-sm font-medium text-slate-300">Tonalidad</label>
-            <input
+            <select
               {...register('key')}
-              placeholder="Ej. C Major, B minor"
-              className="w-full px-3.5 py-2.5 text-white bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-colors"
-            />
+              className="w-full px-3.5 py-2.5 text-white bg-slate-900 border border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-colors appearance-none"
+            >
+              <option value="" className="bg-slate-900">Desconocida</option>
+              {['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'].flatMap(note => [
+                <option key={`${note}-major`} value={`${note} Major`} className="bg-slate-900">{note} Major</option>,
+                <option key={`${note}-minor`} value={`${note} Minor`} className="bg-slate-900">{note} Minor</option>
+              ])}
+            </select>
           </div>
 
           <div className="pt-4 flex items-center justify-end space-x-3">
