@@ -20,3 +20,11 @@ class CustomSongResponse(CustomSongBase):
     class Config:
         from_attributes = True
         # ORM mode para compatibilidad con SQLAlchemy
+
+class CustomSongStatistics(BaseModel):
+    total_songs: int
+    total_artists: int
+    avg_tempo: float
+    tempo_distribution: dict # E.g., {"Slow": 5, "Medium": 10, "Fast": 3}
+    songs_per_key: dict # E.g., {"C Major": 4, "A Minor": 2}
+    songs_per_time_signature: dict # E.g., {"4": 15, "3": 2}

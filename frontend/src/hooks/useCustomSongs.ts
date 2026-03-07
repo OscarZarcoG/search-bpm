@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { CustomSong, CustomSongCreate, CustomSongUpdate } from '@/types/customSong';
-import { getCustomSongs, createCustomSong, updateCustomSong, deleteCustomSong } from '@/services/customBpmApi';
+import { CustomSong, CustomSongCreate, CustomSongUpdate, CustomSongStatistics } from '@/types/customSong';
+import { getCustomSongs, createCustomSong, updateCustomSong, deleteCustomSong, getCustomSongStatistics } from '@/services/customBpmApi';
 
 export function useCustomSongs() {
   const [songs, setSongs] = useState<CustomSong[]>([]);
+  const [stats, setStats] = useState<CustomSongStatistics | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -11,12 +12,25 @@ export function useCustomSongs() {
     setLoading(true);
     setError(null);
     try {
-      const data = await getCustomSongs();
-      setSongs(data);
+      const [songsData, statsData] = await Promise.all([
+        getCustomSongs(),
+        getCustomSongStatistics()
+      ]);
+      setSongs(songsData);
+      setStats(statsData);
     } catch {
       setError('Error al recuperar tus canciones.');
     } finally {
       setLoading(false);
+    }
+  }, []);
+
+  const refreshStats = useCallback(async () => {
+    try {
+      const statsData = await getCustomSongStatistics();
+      setStats(statsData);
+    } catch {
+      console.error("Failed to refresh stats");
     }
   }, []);
 
@@ -28,6 +42,7 @@ export function useCustomSongs() {
     try {
       const newSong = await createCustomSong(song);
       setSongs(prev => [...prev, newSong]);
+      refreshStats();
       return true;
     } catch {
       setError('Error al crear la canción.');
@@ -39,6 +54,7 @@ export function useCustomSongs() {
     try {
       const updated = await updateCustomSong(id, song);
       setSongs(prev => prev.map(s => (s.id === id ? updated : s)));
+      refreshStats();
       return true;
     } catch {
       setError('Error al actualizar la canción.');
@@ -50,6 +66,7 @@ export function useCustomSongs() {
     try {
       await deleteCustomSong(id);
       setSongs(prev => prev.filter(s => s.id !== id));
+      refreshStats();
       return true;
     } catch {
       setError('Error al eliminar la canción.');
@@ -57,5 +74,5 @@ export function useCustomSongs() {
     }
   };
 
-  return { songs, loading, error, addSong, editSong, removeSong, fetchSongs };
+  return { songs, stats, loading, error, addSong, editSong, removeSong, fetchSongs };
 }

@@ -2,10 +2,15 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 from app.database import get_db
-from app.schemas.custom_song_schema import CustomSongResponse, CustomSongCreate, CustomSongUpdate
+from app.schemas.custom_song_schema import CustomSongResponse, CustomSongCreate, CustomSongUpdate, CustomSongStatistics
 from app.services.custom_song_service import CustomSongService
 
 router = APIRouter(prefix="/api/custom-songs", tags=["Canciones Personalizadas (CRUD)"])
+
+@router.get("/statistics", response_model=CustomSongStatistics)
+def get_custom_songs_statistics(db: Session = Depends(get_db)):
+    """Obtiene estadísticas globales de las canciones guardadas."""
+    return CustomSongService.get_statistics(db)
 
 @router.get("/", response_model=List[CustomSongResponse])
 def get_custom_songs(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
