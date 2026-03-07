@@ -5,15 +5,13 @@ import { useCustomSongs } from '@/hooks/useCustomSongs';
 import { CustomSongForm } from '@/components/CustomSongForm';
 import { ConfirmModal } from '@/components/ConfirmModal';
 import { Metronome } from '@/components/Metronome';
-import { StatsOverview } from '@/components/StatsOverview';
 import { CustomSong, CustomSongCreate } from '@/types/customSong';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
-import { Plus, Trash2, Edit3, Activity, Music, Clock, Filter, BarChart2 } from 'lucide-react';
+import { Plus, Trash2, Edit3, Activity, Music, Clock, Filter } from 'lucide-react';
 
 export default function MisCanciones() {
-  const { songs, stats, loading, error, addSong, editSong, removeSong } = useCustomSongs();
+  const { songs, loading, error, addSong, editSong, removeSong } = useCustomSongs();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showStats, setShowStats] = useState(false);
   const [editingSong, setEditingSong] = useState<CustomSong | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [songToDelete, setSongToDelete] = useState<number | null>(null);
@@ -75,23 +73,19 @@ export default function MisCanciones() {
       <div className="z-10 w-full max-w-4xl mx-auto space-y-8 mt-12">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-white tracking-tight">Mis Canciones</h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-3xl font-bold text-white tracking-tight">Mis Canciones</h1>
+              {!loading && songs.length > 0 && (
+                <span className="px-3 py-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full text-sm font-bold">
+                  {songs.length}
+                </span>
+              )}
+            </div>
             <p className="text-slate-400 text-sm mt-1">
               Guarda y administra los BPMs exactos de las versiones de tu grupo.
             </p>
           </div>
           <div className="flex gap-3">
-            <button 
-              onClick={() => setShowStats(!showStats)}
-              className={`flex items-center justify-center px-4 py-2.5 text-sm font-medium rounded-xl transition-all border ${
-                showStats 
-                ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30' 
-                : 'bg-slate-900/50 text-slate-400 border-slate-800 hover:border-slate-700'
-              }`}
-            >
-              <BarChart2 className="w-4 h-4 mr-2" />
-              {showStats ? 'Ocultar Estadísticas' : 'Ver Estadísticas'}
-            </button>
             <button 
               onClick={handleOpenNew}
               className="flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-xl hover:bg-indigo-500 transition-colors shadow-lg shadow-indigo-600/20"
@@ -102,11 +96,6 @@ export default function MisCanciones() {
           </div>
         </div>
 
-        {showStats && !loading && songs.length > 0 && (
-          <div className="animate-in fade-in slide-in-from-top-4 duration-500">
-            <StatsOverview stats={stats} />
-          </div>
-        )}
 
         {error && (
           <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-sm">

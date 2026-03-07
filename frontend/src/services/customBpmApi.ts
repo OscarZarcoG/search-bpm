@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CustomSong, CustomSongCreate, CustomSongUpdate, CustomSongStatistics } from '@/types/customSong';
+import { CustomSong, CustomSongCreate, CustomSongUpdate } from '@/types/customSong';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -12,11 +12,6 @@ const apiClient = axios.create({
 
 export const getCustomSongs = async (): Promise<CustomSong[]> => {
   const response = await apiClient.get<CustomSong[]>('/api/custom-songs/');
-  return response.data;
-};
-
-export const getCustomSongStatistics = async (): Promise<CustomSongStatistics> => {
-  const response = await apiClient.get<CustomSongStatistics>('/api/custom-songs/statistics');
   return response.data;
 };
 
